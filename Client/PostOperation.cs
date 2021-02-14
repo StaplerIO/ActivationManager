@@ -16,11 +16,11 @@ namespace Client
         {
             var currentDirectory = Environment.CurrentDirectory;
             var resource = Properties.Resources.CR400BF_C;
-            var extractPath = Path.Combine(currentDirectory, _resourceName);
-            await File.WriteAllBytesAsync(extractPath, resource);
+            var filePath = Path.Combine(currentDirectory, _resourceName);
+            await File.WriteAllBytesAsync(filePath, resource);
 
-            ZipFile.ExtractToDirectory(extractPath, Path.Combine(currentDirectory, _resourceName.Replace(".zip", "")));
-            File.Delete(extractPath);
+            ZipFile.ExtractToDirectory(filePath, currentDirectory);
+            File.Delete(filePath);
         }
     }
 }

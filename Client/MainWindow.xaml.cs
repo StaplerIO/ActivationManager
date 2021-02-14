@@ -26,6 +26,8 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly string registrationUrl = "http://39.106.211.14:32118/activaction/register";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -54,7 +56,7 @@ namespace Client
 
             var content = JsonContent.Create(model);
 
-            var response = await client.PostAsync("http://localhost:32118/activaction/register", content);
+            var response = await client.PostAsync(registrationUrl, content);
 
             var responseContent = await response.Content.ReadAsStringAsync();
 
@@ -86,6 +88,28 @@ namespace Client
             {
             }
             return "xx-xx-xx-xx-xx-xx";
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var model = new ActivateViewModel
+            {
+                MACAddress = GetMacByNetworkInterface(),
+            };
+
+            var content = JsonContent.Create(model);
+
+            var client = new HttpClient();
+            var response = await client.PostAsync(registrationUrl, content);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                _ = MessageBox.Show(responseContent, "Activaction Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                await PostOperation.ExtractResourceAsync();
+                _ = MessageBox.Show("Resource extracted successfully", "ActivationManager", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

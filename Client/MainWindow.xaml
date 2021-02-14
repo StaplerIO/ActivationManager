@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         
-        Title="Activation" Height="339" Width="400">
+        Title="Activation" Height="339" Width="400"
+        Loaded="Window_Loaded">
     <Grid Margin="0,0,0,0">
         <Button Content="Activate" HorizontalAlignment="Left" Margin="34,235,0,0" VerticalAlignment="Top" Height="34" Width="334" Click="ActivateButton_Click" Grid.ColumnSpan="2"/>
         <TextBox HorizontalAlignment="Left" Margin="35,68,0,0" Text="xxx" TextWrapping="Wrap" VerticalAlignment="Top" Width="333" Height="24" 

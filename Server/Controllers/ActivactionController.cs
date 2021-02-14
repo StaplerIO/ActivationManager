@@ -28,11 +28,23 @@ namespace Server.Controllers
         public async Task<IActionResult> Register(ActivateViewModel model)
         {
             var validSerials = await System.IO.File.ReadAllLinesAsync(Constants.ValidSerialsFilePath);
-            if (validSerials.Contains(model.SerialNumber))
+            if (validSerials.Contains(model.SerialNumber) && _context.ActivationHistoryCredentials.FirstOrDefault(h => h.SerialNumber == model.SerialNumber) == null)
             {
                 _context.ActivationHistoryCredentials.Add(ActivationHistoryCredential.FromActivateViewModel(model));
                 await _context.SaveChangesAsync();
 
+                return Ok("Validate operation completed successfully!");
+            }
+
+            return Unauthorized("Serial number not found!");
+        }
+
+        [HttpPost]
+        public IActionResult Validate(ActivateViewModel model)
+        {
+            var history = _context.ActivationHistoryCredentials.FirstOrDefault(h => h.MACAddress == model.MACAddress);
+            if (history != null)
+            {
                 return Ok("Validate operation completed successfully!");
             }
 
